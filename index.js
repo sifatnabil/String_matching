@@ -6,6 +6,7 @@ const sleep = require("util").promisify(setTimeout);
 const { Worker, workerData } = require("worker_threads");
 const path = require("path");
 const matchNames = require("./matchNames");
+const fs = require("fs");
 
 const workerPath = path.resolve("./worker.js");
 const batchSize = 22;
@@ -46,6 +47,8 @@ const readNames = async (excelFileName) => {
   const details = [];
   details.push(...result.rows);
 
+  // fs.writeFile("test.json", "[", () => {});
+
   for (let i = 0; i < details.length; i++) {
     let actualName = "";
     if (details[i].name.startsWith("Prof Dr")) {
@@ -60,6 +63,13 @@ const readNames = async (excelFileName) => {
     const nameCombinations = combinations(nameWords);
 
     console.log(`Matching for name ${details[i].name}`);
+    let bestMatchResult = {
+      Name: "",
+      "Max Matched Name": "",
+      "Max Match ratio": 0,
+      OneKeyId: "",
+      workplace: [],
+    };
     for (const option of nameCombinations) {
       const firstName = option.firstname;
       const lastName = option.lastname;
@@ -79,16 +89,20 @@ const readNames = async (excelFileName) => {
           details[i].name
         );
         console.log("Done with the batch\n");
-        console.log(matchResult);
+        if (
+          matchResult["Max Match ratio"] > bestMatchResult["Max Match ratio"]
+        ) {
+          bestMatchResult = matchResult;
+        }
         await sleep(intervalTimeSeconds * 1000);
         j += batchSize;
-        break;
       }
-      break;
     }
-    break;
-
-    // console.log(nameCombinations);
+    fs.appendFile(
+      "match_result.json",
+      JSON.stringify(bestMatchResult) + ",",
+      () => {}
+    );
   }
 };
 

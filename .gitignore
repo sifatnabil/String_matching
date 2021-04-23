@@ -2,3 +2,7 @@ node_modules
 .env
 not_found.xlsx
 sample-response.json
+worker.js
+test.json
+match_result.json
+*.xlsx

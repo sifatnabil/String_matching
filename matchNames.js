@@ -4,7 +4,8 @@ module.exports = async (responses, actualName, nameWithTitle) => {
   let maxMatchedName = "";
   let maxMatchedNameRatio = 0;
   let onekeyId = 0;
-  //   let individualEid = 0;
+  let workplace = [];
+
   for (const pages of responses) {
     for (const data of pages) {
       const fullname = data.firstName + " " + data.lastName;
@@ -13,6 +14,7 @@ module.exports = async (responses, actualName, nameWithTitle) => {
         maxMatchedNameRatio = matchRatio;
         maxMatchedName = fullname;
         onekeyId = data.individualEid;
+        workplace = data.workplaces;
       }
     }
   }
@@ -22,6 +24,7 @@ module.exports = async (responses, actualName, nameWithTitle) => {
     "Max Matched Name": maxMatchedName,
     "Max Match ratio": maxMatchedNameRatio,
     OneKeyId: onekeyId,
+    Workplaces: workplace,
   };
 
   return res;

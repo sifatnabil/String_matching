@@ -4,6 +4,7 @@ const { api_url, api_cookie } = require("./config");
 const fs = require("fs");
 
 const number = workerData.number;
+const timeOut = 6 * 60 * 1000;
 
 const options = {
   headers: {
@@ -12,6 +13,8 @@ const options = {
     "User-Agent":
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
   },
+
+  timeout: timeOut,
 };
 
 const url = api_url + number;
